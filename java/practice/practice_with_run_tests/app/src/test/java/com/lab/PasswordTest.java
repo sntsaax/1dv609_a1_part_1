@@ -29,7 +29,7 @@ public class PasswordTest {
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
-        // return (IPassword) new BugWrongExceptionMessage(s);
+        return (IPassword) new BugWrongExceptionMessage(s);
         // return (IPassword) new BugMissingPasswordLengthCheck(s);
         // return (IPassword) new BugMissingNumberCheck(s);
         // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
@@ -73,5 +73,23 @@ public class PasswordTest {
         assertThrows(Exception.class, () -> {
             getPassword(input);
         }, "BugVeryShort allowed a 6-character password to pass!");
+    }
+
+    @Test
+    public void constructorShouldThrowCorrectMessageForShortPassword() {
+        /* Input String: "abc1" (4 characters)
+        */
+        String input = "abc1";
+
+        // 1. Capture the exception object in a variable
+        Exception exception = assertThrows(Exception.class, () -> {
+            getPassword(input);
+        });
+
+        // 2. Assert that the message is EXACTLY what is required
+        // Expected: "To short password"
+        // Actual (in this bug): "Wrong message"
+        assertEquals("To short password", exception.getMessage(), 
+            "The exception was thrown, but the message text was incorrect!");
     }
 }

@@ -30,9 +30,9 @@ public class PasswordTest {
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
         // return (IPassword) new BugWrongExceptionMessage(s);
-        return (IPassword) new BugMissingPasswordLengthCheck(s);
+        // return (IPassword) new BugMissingPasswordLengthCheck(s);
         // return (IPassword) new BugMissingNumberCheck(s);
-        // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
+        return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
         // return (IPassword) new BugWrongHashingAlgorithm(s);
     }
 
@@ -105,5 +105,33 @@ public class PasswordTest {
         assertThrows(Exception.class, () -> {
             getPassword(input);
         }, "The code allowed a 1-character password to pass because it forgot the length check!");
+    }
+
+    @Test
+    public void constructorShouldThrowExceptionForPasswordWithoutNumber() {
+        /* Input String: "TwelveLetter" (Length: 12)
+        - It is 12 characters (Passes Length Check).
+        - It contains NO numbers.
+        */
+        String input = "TwelveLetter";
+
+        // Correct should throw "Does not contain a number"
+        assertThrows(Exception.class, () -> {
+            getPassword(input);
+        }, "The code allowed a password with no numbers!");
+    }
+
+    @Test
+    public void isPasswordSameShouldReturnFalseForDifferentPasswords() throws Exception {
+        /* Input String: Two different but valid passwords 
+        Password A: "ValidPassword123"
+        Password B: "OtherPassword456"
+        */
+        IPassword p1 = getPassword("ValidPassword123");
+        IPassword p2 = getPassword("OtherPassword456");
+
+        // The Correct version should return FALSE.
+        // BugIsPasswordSameAlwaysTrue will return TRUE.
+        assertFalse(p1.isPasswordSame(p2), "The comparison logic incorrectly returned true for two different passwords!");
     }
 }

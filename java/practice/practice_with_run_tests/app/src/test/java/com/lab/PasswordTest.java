@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PasswordTest {
     private IPassword getPassword(String s) throws Exception {
         // Uncomment the version you are currently testing
-        return (IPassword) new Password(s);
+        // return (IPassword) new Password(s);
         // return (IPassword) new BugDoesNotTrim(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
@@ -15,6 +15,7 @@ public class PasswordTest {
         // return (IPassword) new BugMissingNumberCheck(s);
         // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
         // return (IPassword) new BugWrongHashingAlgorithm(s);
+        return (IPassword) new BuggyPassword(s);
     }
 
     @Test

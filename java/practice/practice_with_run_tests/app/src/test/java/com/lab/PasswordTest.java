@@ -29,8 +29,8 @@ public class PasswordTest {
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
-        return (IPassword) new BugWrongExceptionMessage(s);
-        // return (IPassword) new BugMissingPasswordLengthCheck(s);
+        // return (IPassword) new BugWrongExceptionMessage(s);
+        return (IPassword) new BugMissingPasswordLengthCheck(s);
         // return (IPassword) new BugMissingNumberCheck(s);
         // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
         // return (IPassword) new BugWrongHashingAlgorithm(s);
@@ -91,5 +91,19 @@ public class PasswordTest {
         // Actual (in this bug): "Wrong message"
         assertEquals("To short password", exception.getMessage(), 
             "The exception was thrown, but the message text was incorrect!");
+    }
+
+    @Test
+    public void constructorShouldThrowExceptionForShortPasswordWithNumber() {
+        /* Input String: "1" (Length: 1)
+        - It is shorter than 12.
+        - It contains a number ('1').
+        */
+        String input = "1";
+
+        // Correct version should blow the whistle because it's too short.
+        assertThrows(Exception.class, () -> {
+            getPassword(input);
+        }, "The code allowed a 1-character password to pass because it forgot the length check!");
     }
 }

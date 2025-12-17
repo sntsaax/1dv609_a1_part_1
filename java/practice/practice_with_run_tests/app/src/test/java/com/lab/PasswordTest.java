@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PasswordTest {
     private IPassword getPassword(String s) throws Exception {
-        return (IPassword) new Password(s);
-        // return (IPassword) new BugDoesNotTrim(s);
+        // return (IPassword) new Password(s);
+        return (IPassword) new BugDoesNotTrim(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
@@ -37,7 +37,16 @@ public class PasswordTest {
     }
 
     @Test
-    public void shouldAlwaysPass() throws Exception {
-        assertTrue(true);
+    public void constructorShouldThrowExceptionForUntrimmedShortPassword() {
+        /* Input String: "  short123  " 
+        - Untrimmed length: 12 characters
+        - Trimmed length: 8 characters
+        */
+        String input = "  short123  ";
+
+        // The correct Password should throw an exception
+        assertThrows(Exception.class, () -> {
+            getPassword(input);
+        }, "The password was too short when trimmed, but no exception was thrown!");
     }
 }

@@ -32,8 +32,8 @@ public class PasswordTest {
         // return (IPassword) new BugWrongExceptionMessage(s);
         // return (IPassword) new BugMissingPasswordLengthCheck(s);
         // return (IPassword) new BugMissingNumberCheck(s);
-        return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
-        // return (IPassword) new BugWrongHashingAlgorithm(s);
+        // return (IPassword) new BugIsPasswordSameAlwaysTrue(s);
+        return (IPassword) new BugWrongHashingAlgorithm(s);
     }
 
     @Test
@@ -133,5 +133,19 @@ public class PasswordTest {
         // The Correct version should return FALSE.
         // BugIsPasswordSameAlwaysTrue will return TRUE.
         assertFalse(p1.isPasswordSame(p2), "The comparison logic incorrectly returned true for two different passwords!");
+    }
+
+    @Test
+    public void getPasswordHashShouldReturnCorrectValue() throws Exception {
+        /* Input String: "ValidPass1234"
+        Buggy Version Hash: Always 0, 1, 2, 3, or 4 (because of % 5)
+        */
+        IPassword p = getPassword("ValidPass1234");
+        
+        // We create a second instance of the SAME password to see if they match 
+        // AND if they match the specific algorithm's logic.
+        int expectedHash = 1895687976;
+        
+        assertEquals(expectedHash, p.getPasswordHash(), "The hashing algorithm produced the wrong value!");
     }
 }

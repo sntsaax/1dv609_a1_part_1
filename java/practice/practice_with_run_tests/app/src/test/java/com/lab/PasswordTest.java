@@ -26,7 +26,7 @@ public class PasswordTest {
     private IPassword getPassword(String s) throws Exception {
         // return (IPassword) new Password(s);
         // return (IPassword) new BugDoesNotTrim(s);
-        return (IPassword) new BugToShortPassword(s);
+        // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugToShortPassword(s);
         // return (IPassword) new BugVeryShort(s);
         // return (IPassword) new BugWrongExceptionMessage(s);
@@ -60,5 +60,18 @@ public class PasswordTest {
         assertThrows(Exception.class, () -> {
             getPassword(input);
         }, "Failed to catch a password that was 11 characters long!");
+    }
+
+    @Test
+    public void constructorShouldThrowExceptionForPasswordLength6() {
+        /* Input String: "Passw1" (Length: 6)
+        - Correct Version: Sees length 6. 6 < 12 is TRUE. Throws exception.
+        - BugVeryShort: Sees length 6. 6 < 6 is FALSE. Does NOT throw exception.
+        */
+        String input = "Passw1"; 
+
+        assertThrows(Exception.class, () -> {
+            getPassword(input);
+        }, "BugVeryShort allowed a 6-character password to pass!");
     }
 }
